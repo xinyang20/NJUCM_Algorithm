@@ -2,7 +2,8 @@
 	{
 		"correct_answers":
 		[
-			"4"
+			"4",
+			"4\nBCDA"
 		],
 		"test": "ABCADAB\nBACDBA\n"
 	}
