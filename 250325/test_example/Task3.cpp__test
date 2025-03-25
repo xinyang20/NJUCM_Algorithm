@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"fish"
+		],
+		"test": "hish\nfish\nvista\n"
+	}
+]
