@@ -1,0 +1,9 @@
+[
+	{
+		"correct_answers":
+		[
+			"max:17\nway:1 3 5"
+		],
+		"test": "5\n2 5 4 2 3\n6 3 5 4 6\n10\n"
+	}
+]
