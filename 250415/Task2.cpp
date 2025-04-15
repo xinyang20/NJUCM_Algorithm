@@ -30,9 +30,9 @@ void solve() {
 	for (ll i = 0; i < min; i++) {
 		// cout << i + 1 << ":" << ans[i].first << " " << ans[i].second == -1 ? "" : ans[i].second << "\n";
 		cout << i + 1 << ":" << ans[i].first;
-		if(ans[i].second!=-1)
-			cout<<" "<<ans[i].second;
-		cout<<"\n";
+		if (ans[i].second != -1)
+			cout << " " << ans[i].second;
+		cout << "\n";
 	}
 }
 

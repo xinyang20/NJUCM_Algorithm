@@ -17,13 +17,23 @@ void solve() {
 	for (ll i = 0; i < n; i++)
 		cin >> v[i];
 	sort(v.begin(), v.end());
-	for (ll i = 0; i < n / 2; i++){
-		sum += v[i] + v[n - i - 1];
-		if(n%2==0)
-			sum-=v[i];
+
+	while (n >= 4) {
+		ll sum1 = 2 * v[0] + v[n - 1] + v[n - 2];
+		ll sum2 = 2 * v[1] + v[0] + v[n - 1];
+		if (sum1 > sum2)
+			sum += sum2;
+		else
+			sum += sum1;
+		n -= 2;
 	}
-	if (n % 2 != 0)
-		sum += v[n / 2];
+	if (n == 3)
+		sum += v[0] + v[1] + v[2];
+	else if (n == 2)
+		sum += v[1];
+	else if (n == 1)
+		sum += v[0];
+
 	cout << sum << endl;
 }
 

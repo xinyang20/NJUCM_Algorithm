@@ -29,37 +29,37 @@ void solve() {
 	for (ll i = 0; i < edge_num; i++)
 		cin >> edge[i].from_node >> edge[i].end_node >> edge[i].lenth;
 
-	queue<ll> q;
-	q.push(1);
-	while (!q.empty()) {
-		ll now_node = q.front();
-		q.pop();
-		for (ll i = 0; i < edge_num; i++)
-			if (edge[i].from_node == now_node) {
-				if (dist[edge[i].end_node] > dist[edge[i].from_node] + edge[i].lenth) {
-					dist[edge[i].end_node] = dist[edge[i].from_node] + edge[i].lenth;
-					pre[edge[i].end_node] = edge[i].from_node;
-					q.push(edge[i].end_node);
-				}
-			}
-	}
-
-	// Dijstra
-	// priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> q;
-	// q.push({0,1});
+	// queue<ll> q;
+	// q.push(1);
 	// while (!q.empty()) {
-	// 	ll now_dist = q.top().first,now_node = q.top().second;
-	//     q.pop();
-	//     if (now_dist > dist[now_node]) continue;
+	// 	ll now_node = q.front();
+	// 	q.pop();
 	// 	for (ll i = 0; i < edge_num; i++)
 	// 		if (edge[i].from_node == now_node) {
 	// 			if (dist[edge[i].end_node] > dist[edge[i].from_node] + edge[i].lenth) {
 	// 				dist[edge[i].end_node] = dist[edge[i].from_node] + edge[i].lenth;
 	// 				pre[edge[i].end_node] = edge[i].from_node;
-	// 				q.push({dist[edge[i].end_node],edge[i].end_node});
+	// 				q.push(edge[i].end_node);
 	// 			}
 	// 		}
 	// }
+
+	// Dijstra
+	priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> q;
+	q.push({0, 1});
+	while (!q.empty()) {
+		ll now_dist = q.top().first, now_node = q.top().second;
+		q.pop();
+		if (now_dist > dist[now_node]) continue;
+		for (ll i = 0; i < edge_num; i++)
+			if (edge[i].from_node == now_node) {
+				if (dist[edge[i].end_node] > dist[edge[i].from_node] + edge[i].lenth) {
+					dist[edge[i].end_node] = dist[edge[i].from_node] + edge[i].lenth;
+					pre[edge[i].end_node] = edge[i].from_node;
+					q.push({dist[edge[i].end_node], edge[i].end_node});
+				}
+			}
+	}
 
 	cout << "Num:\t";
 	for (int i = 1; i <= node_num; i++)
