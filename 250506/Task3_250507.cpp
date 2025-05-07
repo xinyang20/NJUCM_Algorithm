@@ -78,18 +78,9 @@ void dfs(vector<int> num, vector<step> path) {
 			path.pop_back();
 			nnum.pop_back();
 
-			// Division
-			// if (num2 != 0 && num1 % num2 == 0) {
-			//     s.op = '/';
-			//     s.ans = num1 / num2;
-			//     nnum.push_back(s.ans);
-			//     path.push_back(s);
-			//     dfs(nnum, path);
-			//     path.pop_back();
-			//     nnum.pop_back();
-			// }
-			if (num[j] != 0 && num[i] % num[j] == 0) {
-			// if (num[i] % num[j] == 0 && num[j] != 0) {
+			//	Error Input:1 1 1 1
+			if (num[j] != 0 && num[i] % num[j] == 0) {		//	AC
+			// if (num[i] % num[j] == 0 && num[j] != 0) {	//	WA
 				s.op = '/';
 				s.ans = num[i] / num[j];
 				nnum.push_back(s.ans);
