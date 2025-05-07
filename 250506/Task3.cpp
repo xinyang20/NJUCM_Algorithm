@@ -41,14 +41,6 @@ public:
 int num[4];
 char op[4] = {'+', '-', '*', '/'};
 
-// int max(int a, int b) {
-// 	return a > b ? a : b;
-// }
-
-// int min(int a, int b) {
-// 	return a < b ? a : b;
-// }
-
 bool cmp(int a, int b) {
 	return a > b ? true : false;
 }
@@ -57,34 +49,34 @@ bool cmp(int a, int b) {
 int sss = 0;
 void dfs(int num[], int len, std::vector<step> &path) {
 
+	std::sort(num, num + 4, cmp);
+
 	std::cout << "----------------------\n";
 	std::cout << "step " << sss++ << ":\n";
 	for (int i = 0; i < path.size(); i++)
 		path[i].show();
-	for(int i=0;i<4;i++)
-		std::cout<<num[i]<<" ";
-	std::cout<<endl;
+	for (int i = 0; i < 4; i++)
+		std::cout << num[i] << " ";
+	std::cout << endl;
 
-
-	bool exisit=false;
-	for(int i=0;i<4;i++)
-		if(num[i]==24){
-			exisit=true;
-			break;
+	if (len == 1) {
+		bool exisit = false;
+		for (int i = 0; i < 4; i++) {
+			if (num[i] == 24) {
+				exisit = true;
+				break;
+			}
 		}
-	if (len == 1 && exisit) {
-		return;
+		if (exisit)
+			return;
 	}
-
-	if (num[0] > 24)
-		return;
 
 	for (int n1 = 0; n1 < len; n1++) {
 		if (num[n1] == -1)continue;
 		for (int n2 = 0; n2 < len; n2++) {
 			if (n1 == n2)continue;
 			if (num[n2] == -1)continue;
-			if(num[n2]>num[n1])continue;
+			if (num[n2] > num[n1])continue;
 			int nn1 = num[n1], nn2 = num[n2];
 			step s;
 			for (int o = 0; o < 4; o++) {
@@ -96,8 +88,8 @@ void dfs(int num[], int len, std::vector<step> &path) {
 				if (o == 2)
 					ans = num[n1] * num[n2];
 				if (o == 3) {
-					if (num[n1]%num[n2]== 0)
-						ans = num[n1]/num[n2];
+					if (num[n1] % num[n2] == 0)
+						ans = num[n1] / num[n2];
 					else continue;
 				}
 				s.num1 = num[n1];
@@ -106,11 +98,22 @@ void dfs(int num[], int len, std::vector<step> &path) {
 				s.ans = ans;
 				num[n1] = s.ans; num[n2] = -1;
 				path.push_back(s);
+				std::sort(num, num + 4, cmp);
 				dfs(num, len - 1, path);
 				path.pop_back();
-				num[n1] = nn1; num[n2] = nn2;
+				for (int i = 0; i < 4; i++) {
+					if (num[i] == -1) {
+						num[i] = nn2;
+						break;
+					}
+				}
+				for (int i = 0; i < 4; i++) {
+					if (num[i] == s.ans) {
+						num[i] = nn1;
+						break;
+					}
+				}
 			}
-
 		}
 	}
 }
