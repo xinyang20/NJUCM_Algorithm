@@ -1,0 +1,38 @@
+[
+	{
+		"correct_answers":
+		[
+			"None\nMOD:10\n11\nMOD:100\n5\nMOD:100",
+			"None\n11\n5"
+		],
+		"test": "3\n3\n21\n25\n"
+	},
+	{
+		"correct_answers":
+		[
+			"11\nNone\n11"
+		],
+		"test": "3\n21\n123156\n121\n"
+	},
+	{
+		"correct_answers":
+		[
+			"10000"
+		],
+		"test": "1\n100000000\n"
+	},
+	{
+		"correct_answers":
+		[
+			"None"
+		],
+		"test": "1\n12300\n"
+	},
+	{
+		"correct_answers":
+		[
+			"110"
+		],
+		"test": "1\n12100\n"
+	}
+]
