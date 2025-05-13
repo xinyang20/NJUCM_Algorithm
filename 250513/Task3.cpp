@@ -47,27 +47,9 @@ ll goal;
 mll t;
 
 void solve() {
-	/*
-	// small data
-	get >> goal;
-	if (t.count(goal)) {
-		if (t[goal] != -1)
-			put << t[goal] << endl;
-		else
-			put << "None" << endl;
-	}
-	else {
-		ll num = goal, MOD = 1;
-		while (num) {
-			num /= 10;
-			MOD *= 10;
-		}
-
-		for (ll i = sqrt(goal); i <= 1e5 + 3; i++)
-			if ((i * i) % MOD == goal) {
-				t[goal] = i;
-				break;
-			}
+	{	/*
+		// small data
+		get >> goal;
 		if (t.count(goal)) {
 			if (t[goal] != -1)
 				put << t[goal] << endl;
@@ -75,28 +57,63 @@ void solve() {
 				put << "None" << endl;
 		}
 		else {
-			t[goal] = -1;
-			put << "None" << endl;
-		}
-		// put<<"MOD:"<<MOD<<endl;
-	}
-	*/
-
-	get >> goal;
-	ll goal_p = goal, zero_num = 0, ans = -1;
-	while (goal_p % 10 == 0)
-		zero_num++;
-	if (zero_num & 1 && goal != 0) {
-		ans = -1;
-	}
-	else {
-		if (t.count(goal_p)) {
-			ans = t[goal_p];
-		} else {
 			ll num = goal, MOD = 1;
 			while (num) {
 				num /= 10;
 				MOD *= 10;
+			}
+
+			for (ll i = sqrt(goal); i <= 1e5 + 3; i++)
+				if ((i * i) % MOD == goal) {
+					t[goal] = i;
+					break;
+				}
+			if (t.count(goal)) {
+				if (t[goal] != -1)
+					put << t[goal] << endl;
+				else
+					put << "None" << endl;
+			}
+			else {
+				t[goal] = -1;
+				put << "None" << endl;
+			}
+			// put<<"MOD:"<<MOD<<endl;
+		}
+		*/
+	}
+
+	get >> goal;
+	if (goal == 0) {
+		put << "None" << endl;
+		return;
+	}
+	ll goal_p = goal, zero_num = 0, ans = -1;
+	while (goal_p > 0) {
+		if (goal_p % 10 == 0)
+			zero_num++;
+		else
+			break;
+		goal_p /= 10;
+	}
+	if (zero_num & 1) {
+		if (goal != 0)
+			ans = -1;
+		else
+			ans = 0;
+	}
+	else {
+		if (t.count(goal)) {
+			ans = t[goal];
+		} else {
+			ll num = goal_p, MOD = 1;
+			if (num == 0)
+				MOD = 10;
+			else {
+				while (num) {
+					num /= 10;
+					MOD *= 10;
+				}
 			}
 			ll curr_mod = 1;
 			sll curr_solutions;
@@ -107,20 +124,21 @@ void solve() {
 				for (auto &it : curr_solutions) {
 					for (int i = 0; i < 10; i++) {
 						ll new_m = it + i * curr_mod;
-						if (new_m*new_m==goal_p%next_mod) {
+						if ((new_m * new_m) % next_mod == goal_p % next_mod) {
 							next_solutions.insert(new_m);
 						}
 					}
 				}
-				if(next_solutions.empty())
+				curr_solutions = next_solutions;
+				curr_mod = next_mod;
+				if (next_solutions.empty())
 					break;
-				curr_solutions=next_solutions;
-				curr_mod=next_mod;
 			}
-			if(curr_solutions.empty())
-				t[goal_p]=-1;
+			if (curr_solutions.empty())
+				t[goal] = -1;
 			else
-				t[goal_p]=(*curr_solutions.begin())*qpow(10,zero_num/2);
+				t[goal] = (*curr_solutions.begin()) * qpow(10, zero_num / 2);
+			ans = t[goal];
 		}
 	}
 
