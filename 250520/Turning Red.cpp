@@ -2,45 +2,6 @@
 
 #include <bits/stdc++.h>
 
-#define makep std::make_pair
-#define get std::cin
-#define put std::cout
-#define endl '\n'
-
-using ll = long long;
-using paii = std::pair<int, int>;
-using pall = std::pair<long long , long long>;
-using vpii = std::vector<std::pair<int, int> >;
-using vll = std::vector<long long>;
-using vll2 = std::vector<std::vector<long long> >;
-using vbool = std::vector<bool>;
-using vbool2 = std::vector<std::vector<bool> >;
-using qint = std::queue<int>;
-using mint = std::map<int, int>;
-using mci = std::map<char, int>;
-
-template <class T>
-T qpow(T a, ll b) {
-	T ans = 1;
-	while (b > 0) {
-		if (b & 1)
-			ans *= a;
-		a *= a;
-		b >>= 1;
-	}
-	return ans;
-}
-
-template <class T>
-T tmin(T a, T b) {
-	return a < b ? a : b;
-}
-
-template <class T>
-T tmax(T a, T b) {
-	return a > b ? a : b;
-}
-
 const int INF = 1e9;
 
 struct LightInfo {
@@ -50,16 +11,16 @@ struct LightInfo {
 
 int l_lights, b_buttons;
 std::vector<LightInfo> lights_global;
-std::vector<vpii> button_adj_global;
+std::vector<std::vector<std::pair<int, int> > > button_adj_global;
 std::vector<int> x_presses_global;
-vbool is_fixed_global;
-vbool visited_component_bfs_global;
+std::vector<bool> is_fixed_global;
+std::vector<bool> visited_component_bfs_global;
 std::vector<std::vector<int>> button_controls_lights_global;
 
-mci color_to_int_global = {{'R', 0}, {'G', 1}, {'B', 2}};
+std::map<char, int> color_to_int_global = {{'R', 0}, {'G', 1}, {'B', 2}};
 
 void find(int start_node_idx, std::vector<int>& component_nodes_list) {
-	qint q;
+	std::queue<int> q;
 	q.push(start_node_idx);
 	visited_component_bfs_global[start_node_idx] = true;
 	component_nodes_list.push_back(start_node_idx);
@@ -98,24 +59,24 @@ bool check(const std::vector<int>& current_x_config) {
 
 
 void solve() {
-	get >> l_lights >> b_buttons;
+	std::cin >> l_lights >> b_buttons;
 
 	lights_global.assign(l_lights, LightInfo());
 	std::string initial_colors_str;
-	get >> initial_colors_str;
+	std::cin >> initial_colors_str;
 	for (int i = 0; i < l_lights; ++i) {
 		lights_global[i].initial_color = color_to_int_global[initial_colors_str[i]];
 	}
 
-	button_adj_global.assign(b_buttons, vpii());
+	button_adj_global.assign(b_buttons, std::vector<std::pair<int, int> >());
 	button_controls_lights_global.assign(b_buttons, std::vector<int>());
 
 	for (int i = 0; i < b_buttons; ++i) {
 		int k_count;
-		get >> k_count;
+		std::cin >> k_count;
 		for (int j = 0; j < k_count; ++j) {
 			int light_idx;
-			get >> light_idx;
+			std::cin >> light_idx;
 			--light_idx; // 0-based
 			lights_global[light_idx].buttons.push_back(i);
 			button_controls_lights_global[i].push_back(light_idx);
@@ -126,14 +87,14 @@ void solve() {
 		if (lights_global[i].buttons.size() == 2) {
 			int b1 = lights_global[i].buttons[0];
 			int b2 = lights_global[i].buttons[1];
-			button_adj_global[b1].push_back(makep(b2, i));
-			button_adj_global[b2].push_back(makep(b1, i));
+			button_adj_global[b1].push_back(std::make_pair(b2, i));
+			button_adj_global[b2].push_back(std::make_pair(b1, i));
 		}
 	}
 
 	x_presses_global.assign(b_buttons, -1);
 	is_fixed_global.assign(b_buttons, false);
-	ll total_min_presses = 0;
+	long long total_min_presses = 0;
 
 	for (int i = 0; i < l_lights; ++i) {
 		if (lights_global[i].buttons.size() == 1) {
@@ -143,12 +104,12 @@ void solve() {
 				x_presses_global[button_idx] = required_x;
 				is_fixed_global[button_idx] = true;
 			} else if (x_presses_global[button_idx] != required_x) {
-				put << "impossible" << endl;
+				std::cout << "impossible" << '\n';
 				return;
 			}
 		} else if (lights_global[i].buttons.empty()) {
 			if (lights_global[i].initial_color != 0) {
-				put << "impossible" << endl;
+				std::cout << "impossible" << '\n';
 				return;
 			}
 		}
@@ -158,7 +119,7 @@ void solve() {
 
 	for (int i = 0; i < b_buttons; ++i) {
 		if (is_fixed_global[i] && !visited_component_bfs_global[i]) {
-			qint q_prop;
+			std::queue<int> q_prop;
 			q_prop.push(i);
 			visited_component_bfs_global[i] = true;
 			total_min_presses += x_presses_global[i];
@@ -174,7 +135,7 @@ void solve() {
 					if (is_fixed_global[v]) {
 						if ((lights_global[light_idx].initial_color
 						        + x_presses_global[u] + x_presses_global[v]) % 3 != 0) {
-							put << "impossible" << endl; return;
+							std::cout << "impossible" << '\n'; return;
 						}
 					} else {
 						x_presses_global[v] = (3 - (lights_global[light_idx].initial_color
@@ -194,18 +155,18 @@ void solve() {
 
 			if (component_nodes_list.empty()) continue;
 
-			ll current_best_comp_cost = -1;
-			mint best_comp_values;
+			long long current_best_comp_cost = -1;
+			std::map<int, int> best_comp_values;
 
 			int start_node = component_nodes_list[0];
 
 			for (int try_x_start = 0; try_x_start < 3; ++try_x_start) {
-				mint temp_x_values;
+				std::map<int, int> temp_x_values;
 				temp_x_values[start_node] = try_x_start;
-				ll current_trial_sum = try_x_start;
+				long long current_trial_sum = try_x_start;
 				bool possible_this_trial = true;
 
-				qint q_trial;
+				std::queue<int> q_trial;
 				q_trial.push(start_node);
 				std::map<int, bool> visited_in_trial_bfs_map;
 				visited_in_trial_bfs_map[start_node] = true;
@@ -294,7 +255,7 @@ void solve() {
 			}
 
 			if (current_best_comp_cost == -1) {
-				put << "impossible" << endl;
+				std::cout << "impossible" << '\n';
 				return;
 			}
 			total_min_presses += current_best_comp_cost;
@@ -307,11 +268,11 @@ void solve() {
 
 
 	if (!check(x_presses_global)) {
-		put << "impossible" << endl;
+		std::cout << "impossible" << '\n';
 		return;
 	}
 
-	put << total_min_presses << endl;
+	std::cout << total_min_presses << '\n';
 }
 
 int main() {
